@@ -1,0 +1,40 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+html,body{
+    background: transparent;
+}
+.snipped-wrapper{
+    background: #cccccc;
+    width: 700px;
+    height: 120px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-content: stretch;
+}
+
+.snipped{
+    width: 120px;
+    padding: 10px;
+    border: 1px solid black;
+}
+
+.comments{
+    width: 300px;
+    height: 500px;
+    background: #cccccc;
+    padding: 5px;
+}
+
+.avatar{
+    border-radius: 50%;
+    display: block;
+    float: left;
+    padding-right: 5px;
+}
+.name{
+    padding-right: 3px;
+}
