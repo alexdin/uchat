@@ -15,6 +15,7 @@
     <script src="/js/OAuthHelper.js"></script>
     <title>Chat</title>
 </head>
+
 <script>
 
     let SnippetObj = null;
@@ -90,10 +91,14 @@
                 if (videoId !== '' && videoId !== null) {
                     console.log(' id:' + videoId);
                     MessageObj.readNewMessages();
+                    MessageObj.initClearMessageInterval();
+                    MessageObj.initNewMessageInterval();
+
                 }
             });
         });
     }
+
 </script>
 <body>
     <div class="chat-container" id="chat-container-id">
@@ -101,6 +106,32 @@
     </div>
 <script>
     let chatId = '<?=$chatId?>';
+
+    (function($) {
+        $.fn.isOverflowHeight = function() {
+            return this.each(function() {
+                var el = $(this);
+                if (el.css("overflow") == "hidden") {
+                    var text = el.html();
+                    var t = $(this.cloneNode(true)).hide().css('position', 'absolute').css('overflow', 'visible').height('auto').width(el.width());
+                    el.after(t);
+
+                    function height() {
+                        return t.height() > el.height();
+                    };
+                    if(height())
+                    {
+                        let comments = $('.comment');
+                        if(comments.length > 5){
+                            comments[0].remove();
+                        }
+                    }
+                }
+            });
+        };
+    })(jQuery);
+
+
 </script>
 </body>
 </html>

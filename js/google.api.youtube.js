@@ -68,6 +68,8 @@ class StreamMessages {
     {
         this.container = document.getElementById(name);
         this.messageStore = {};
+        this.clearMessageIteval = null;
+        this.newMessageIteval = null;
     }
 
     readNewMessages()
@@ -82,18 +84,17 @@ class StreamMessages {
     {
         if(items.length > 0) {
             for (let i=0; i<items.length;i++) {
-                 if(document.getElementById(items[i].id) !== undefined){
-                     let comments = $('.comment');
-                     if(comments.length > 5){
-                         comments[0].remove();
-                     }
+                 if(this.messageStore[items[i].id] == undefined){
                      let comment = this.renderComment(
                          items[i].authorDetails.profileImageUrl,
                          items[i].authorDetails.displayName,
                          items[i].snippet.displayMessage,
                          items[i].id
                      );
+
+                    // $('#chat-container-id').isOverflowHeight();
                      this.appendCooment(comment);
+                     this.messageStore[items[i].id] = items[i].id;
                  }
             }
         }
@@ -120,6 +121,25 @@ class StreamMessages {
         }).then(function(response) {
                 return response.result;
             });
+    }
+
+    initClearMessageInterval()
+    {
+        this.clearMessageIteval = setInterval(function() {
+            let comments = $('.comment');
+            if(comments.length >0) {
+                $(comments[0]).fadeOut( "slow",function () {
+                    comments[0].remove();
+                } );
+            }
+        }, 10000);
+    }
+
+    initNewMessageInterval()
+    {
+        this.newMessageIteval = setInterval(function () {
+            MessageObj.readNewMessages();
+        }, 5000);
     }
 
 }
