@@ -57,7 +57,10 @@
                 });
     }
     gapi.load("client:auth2", function() {
-        gapi.auth2.init({client_id: "325464991668-7td1mt49jrtos3h88i7ierh8e9f8tvv3.apps.googleusercontent.com"}).then(function () {
+        gapi.auth2.init({
+            client_id: "325464991668-7td1mt49jrtos3h88i7ierh8e9f8tvv3.apps.googleusercontent.com",
+            ux_mode: "redirect"
+        }).then(function () {
             GoogleAuth = gapi.auth2.getAuthInstance();
 
             // Listen for sign-in state changes.
