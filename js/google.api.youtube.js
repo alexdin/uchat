@@ -1,6 +1,10 @@
 
 const ID_SNIPPED_DATA_CONTAINER = 'snipped-data-container';
 
+const TIME_MESSAGE_HIDE = 20000;
+const TIME_RENEW_MESSAGES = 60000;
+const TIME_HIDE_CHAT_IF_EMPTY = 61000;
+
 let videoId = null;
 
 let responseStore = {
@@ -68,14 +72,19 @@ class StreamMessages {
     {
         this.container = document.getElementById(name);
         this.messageStore = {};
+
         this.clearMessageIteval = null;
         this.newMessageIteval = null;
+        this.hideEmptyChatIterval = null;
     }
 
     readNewMessages()
     {
+        let obj = this;
        this.getChatMessage(videoId).then(function (result) {
-           MessageObj.handleData(result.items);
+           obj.handleData(result.items);
+       },function (err) {
+            clearInterval(obj.newMessageIteval);
        });
 
     }
@@ -83,6 +92,10 @@ class StreamMessages {
     handleData(items)
     {
         if(items.length > 0) {
+            if($(this.container).css('display') == 'none') {
+                $(this.container).fadeIn('slow');
+                this.initHideEmptyChatIterval();
+            }
             for (let i=0; i<items.length;i++) {
                  if(this.messageStore[items[i].id] == undefined){
                      let comment = this.renderComment(
@@ -132,14 +145,29 @@ class StreamMessages {
                     comments[0].remove();
                 } );
             }
-        }, 10000);
+        }, TIME_MESSAGE_HIDE);
     }
 
     initNewMessageInterval()
     {
+        const obj = this;
         this.newMessageIteval = setInterval(function () {
-            MessageObj.readNewMessages();
-        }, 5000);
+            obj.readNewMessages();
+        }, TIME_RENEW_MESSAGES);
+    }
+
+    initHideEmptyChatIterval()
+    {
+        const obj = this;
+        this.hideEmptyChatIterval = setInterval( function () {
+            if($('.comment').length == 0) {
+                $(obj.container).fadeOut('slow',function () {
+                    clearInterval(this.hideEmptyChatIterval);
+                });
+
+            }
+        },TIME_HIDE_CHAT_IF_EMPTY);
+
     }
 
 }

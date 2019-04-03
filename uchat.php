@@ -93,6 +93,7 @@
                     MessageObj.readNewMessages();
                     MessageObj.initClearMessageInterval();
                     MessageObj.initNewMessageInterval();
+                    MessageObj.initHideEmptyChatIterval();
 
                 }
             });
